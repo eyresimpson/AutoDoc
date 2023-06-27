@@ -8,7 +8,6 @@ import {
   Task,
   tasks,
   TaskScope,
-  ViewColumn,
   window,
   workspace,
 } from "vscode";

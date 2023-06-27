@@ -1,1 +1,0 @@
-{"version":3,"file":"i-context-service.js","sourceRoot":"","sources":["../../src/editor-context-service/i-context-service.ts"],"names":[],"mappings":"AAAA,YAAY,CAAA;;;AAEZ,mCAA4E;AAkB5E,MAAsB,iBAAiB;IAsBnC;;OAEG;IACO,QAAQ,CAAC,KAAU;QACzB,iBAAQ,CAAC,cAAc,CAAC,YAAY,EAAE,IAAI,CAAC,WAAW,EAAE,KAAK,CAAC,CAAC;IACnE,CAAC;CACJ;AA5BD,8CA4BC"}
