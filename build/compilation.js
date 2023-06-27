@@ -20,28 +20,30 @@ const logger = createLogger("Compilation");
  * @see {@link https://docs.github.com/en/actions/reference/environment-variables}
  * @see {@link https://github.com/actions/runner/blob/main/src/Runner.Sdk/ProcessInvoker.cs}
  */
-const Env_Is_Ci = process.env["CI"] === "true" || process.env["GITHUB_ACTIONS"] === "true";
+const Env_Is_Ci =
+  process.env["CI"] === "true" || process.env["GITHUB_ACTIONS"] === "true";
 
 /**
  * Only distinguish "development" or not.
  * @type {"development" | "production"}
  */
-const Env_Mode = process.env["NODE_ENV"] === "development" ? "development" : "production";
+const Env_Mode =
+  process.env["NODE_ENV"] === "development" ? "development" : "production";
 
 /**
  * @type {webpack.StatsOptions}
  */
 const Stats_Options = {
-    all: false,
-    assets: true,
-    children: true,
-    errors: true,
-    errorsCount: true,
-    outputPath: true,
-    timings: true,
-    version: true,
-    warnings: true,
-    warningsCount: true,
+  all: false,
+  assets: true,
+  children: true,
+  errors: true,
+  errorsCount: true,
+  outputPath: true,
+  timings: true,
+  version: true,
+  warnings: true,
+  warningsCount: true,
 };
 
 /**
@@ -67,68 +69,74 @@ ${a.emitted ? "[emitted]" : a.comparedForEmit ? "[compared for emit]" : ""}\
  * @param {webpack.StatsCompilation} i - The beginning node.
  */
 const formatStatsInfo = (i) => {
-    let r = i.name
-        ? `
+  let r = i.name
+    ? `
 STATS @ ${i.name}
 ${i.assets?.map(formatAssetInfo).join("\n") ?? "No asset."}
-Compiled in ${i.time} ms. Errors: ${i.errorsCount}. Warnings: ${i.warningsCount}.
+Compiled in ${i.time} ms. Errors: ${i.errorsCount}. Warnings: ${
+        i.warningsCount
+      }.
 `
-        : "";
+    : "";
 
-    if (i.children?.length) {
-        for (const c of i.children) {
-            r += formatStatsInfo(c);
-        }
+  if (i.children?.length) {
+    for (const c of i.children) {
+      r += formatStatsInfo(c);
     }
+  }
 
-    return r;
+  return r;
 };
 
 const run = () => {
-    logger.log(`Started. Mode: ${Env_Mode}. CI: ${Env_Is_Ci}.`);
+  logger.log(`Started. Mode: ${Env_Mode}. CI: ${Env_Is_Ci}.`);
 
-    const configs = require("../webpack.config.js");
+  const configs = require("../webpack.config.js");
 
-    for (const c of configs) {
-        c.mode = Env_Mode;
+  for (const c of configs) {
+    c.mode = Env_Mode;
 
-        if (Env_Is_Ci) {
-            c.devtool = false;
-        }
+    if (Env_Is_Ci) {
+      c.devtool = false;
+    }
+  }
+
+  webpack(configs, (err, stats) => {
+    // `!stats` is just to satisfy type-checking.
+    if (err || !stats) {
+      throw err;
     }
 
-    webpack(configs, (err, stats) => {
-        // `!stats` is just to satisfy type-checking.
-        if (err || !stats) {
-            throw err;
-        }
+    /** @type {Required<webpack.StatsCompilation>} */
+    // @ts-ignore Too hard to check type. Please debug to inspect it.
+    const info = stats.toJson(Stats_Options);
 
-        /** @type {Required<webpack.StatsCompilation>} */
-        // @ts-ignore Too hard to check type. Please debug to inspect it.
-        const info = stats.toJson(Stats_Options);
+    logger.append(`webpack ${info.version}`, true, true);
 
-        logger.append(`webpack ${info.version}`, true, true);
-
-        // All errors. Treat warning as error.
-        if (info.errorsCount || info.warningsCount) {
-            logger.append([...info.errors, ...info.warnings].map(formatCompilationError).join("\n"));
-            logger.append(`
+    // All errors. Treat warning as error.
+    if (info.errorsCount || info.warningsCount) {
+      logger.append(
+        [...info.errors, ...info.warnings]
+          .map(formatCompilationError)
+          .join("\n")
+      );
+      logger.append(`
 Errors: ${info.errorsCount}.
 Warnings: ${info.warningsCount}.
 `);
-        }
+    }
 
-        // Summary of each configuration.
-        logger.append(formatStatsInfo(info));
+    // Summary of each configuration.
+    logger.append(formatStatsInfo(info));
 
-        logger.flush();
+    logger.flush();
 
-        if (info.errorsCount) {
-            throw new Error("{Compilation} Failed.");
-        }
+    if (info.errorsCount) {
+      throw new Error("{Compilation} Failed.");
+    }
 
-        logger.log("Passing.");
-    });
+    logger.log("Passing.");
+  });
 };
 
 module.exports = Object.freeze({ run });

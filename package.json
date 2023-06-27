@@ -1,171 +1,180 @@
 {
-    "name": "auto-doc",
-    "displayName": "%ext.displayName%",
-    "description": "%ext.description%",
-    "icon": "images/Markdown-mark.png",
-    "version": "0.0.1",
-    "publisher": "Noah Jones",
-    "engines": {
-        "vscode": "^1.72.0"
+  "name": "auto-doc",
+  "displayName": "%ext.displayName%",
+  "description": "%ext.description%",
+  "icon": "images/Markdown-mark.png",
+  "version": "0.0.1",
+  "publisher": "Noah Jones",
+  "engines": {
+    "vscode": "^1.72.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Other"
+  ],
+  "keywords": [
+    "markdown",
+    "vuepress",
+    "doc"
+  ],
+  "bugs": {
+    "url": "https://github.com/yzhang-gh/vscode-markdown/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yzhang-gh/vscode-markdown"
+  },
+  "license": "MIT",
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onLanguage:rmd",
+    "onLanguage:quarto",
+    "workspaceContains:README.md"
+  ],
+  "main": "./dist/node/main.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "nodeDependencies",
+          "name": "Vuepress"
+        }
+      ]
     },
-    "categories": [
-        "Programming Languages",
-        "Formatters",
-        "Other"
+    "colors": [
+      {
+        "id": "markdown.extension.editor.codeSpan.background",
+        "description": "Background color of code spans in the Markdown editor.",
+        "defaults": {
+          "dark": "#00000000",
+          "light": "#00000000",
+          "highContrast": "#00000000"
+        }
+      },
+      {
+        "id": "markdown.extension.editor.codeSpan.border",
+        "description": "Border color of code spans in the Markdown editor.",
+        "defaults": {
+          "dark": "editor.selectionBackground",
+          "light": "editor.selectionBackground",
+          "highContrast": "editor.selectionBackground"
+        }
+      },
+      {
+        "id": "markdown.extension.editor.formattingMark.foreground",
+        "description": "Color of formatting marks (paragraphs, hard line breaks, links, etc.) in the Markdown editor.",
+        "defaults": {
+          "dark": "editorWhitespace.foreground",
+          "light": "editorWhitespace.foreground",
+          "highContrast": "diffEditor.insertedTextBorder"
+        }
+      },
+      {
+        "id": "markdown.extension.editor.trailingSpace.background",
+        "description": "Background color of trailing space (U+0020) characters in the Markdown editor.",
+        "defaults": {
+          "dark": "diffEditor.diagonalFill",
+          "light": "diffEditor.diagonalFill",
+          "highContrast": "editorWhitespace.foreground"
+        }
+      }
     ],
-    "keywords": [
-        "markdown","vuepress","doc"
+    "commands": [
+      {
+        "command": "markdown.extension.vp.insertImg",
+        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+        "title": "Auto Doc: 插入图片",
+        "category": "Auto Doc"
+      },
+      {
+        "command": "markdown.extension.vp.previewFile",
+        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+        "title": "Auto Doc: 预览文件",
+        "category": "Auto Doc"
+      },
+      {
+        "command": "markdown.extension.vp.workstart",
+        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+        "title": "Auto Doc: 项目启动",
+        "category": "Auto Doc"
+      },
+      {
+        "command": "markdown.extension.vp.ss",
+        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+        "title": "Auto Doc: 图片整理（危险）",
+        "category": "Auto Doc"
+      },
+      {
+        "command": "markdown.extension.vp.s2",
+        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+        "title": "Auto Doc: 目录整理（危险）",
+        "category": "Auto Doc"
+      },
+      {
+        "command": "markdown.extension.vp.open",
+        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+        "title": "打开",
+        "category": "Auto Doc"
+      }
     ],
-    "bugs": {
-        "url": "https://github.com/yzhang-gh/vscode-markdown/issues"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/yzhang-gh/vscode-markdown"
-    },
-    "license": "MIT",
-    "activationEvents": [
-        "onLanguage:markdown",
-        "onLanguage:rmd",
-        "onLanguage:quarto",
-        "workspaceContains:README.md"
-    ],
-    "main": "./dist/node/main.js",
-    "contributes": {
-        "viewsContainers": {
-            "activitybar": [
-                {
-                    "id": "dir-tree-container",
-                    "title": "数据结构",
-                    "icon": "images/Markdown-mark.svg"
-                }
-            ]
+    "menus": {
+      "editor/context": [
+        {
+          "command": "markdown.extension.vp.insertImg",
+          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
+          "group": "markdown.print@2"
         },
-        "colors": [
-            {
-                "id": "markdown.extension.editor.codeSpan.background",
-                "description": "Background color of code spans in the Markdown editor.",
-                "defaults": {
-                    "dark": "#00000000",
-                    "light": "#00000000",
-                    "highContrast": "#00000000"
-                }
-            },
-            {
-                "id": "markdown.extension.editor.codeSpan.border",
-                "description": "Border color of code spans in the Markdown editor.",
-                "defaults": {
-                    "dark": "editor.selectionBackground",
-                    "light": "editor.selectionBackground",
-                    "highContrast": "editor.selectionBackground"
-                }
-            },
-            {
-                "id": "markdown.extension.editor.formattingMark.foreground",
-                "description": "Color of formatting marks (paragraphs, hard line breaks, links, etc.) in the Markdown editor.",
-                "defaults": {
-                    "dark": "editorWhitespace.foreground",
-                    "light": "editorWhitespace.foreground",
-                    "highContrast": "diffEditor.insertedTextBorder"
-                }
-            },
-            {
-                "id": "markdown.extension.editor.trailingSpace.background",
-                "description": "Background color of trailing space (U+0020) characters in the Markdown editor.",
-                "defaults": {
-                    "dark": "diffEditor.diagonalFill",
-                    "light": "diffEditor.diagonalFill",
-                    "highContrast": "editorWhitespace.foreground"
-                }
-            }
-        ],
-        "commands": [
-            {
-                "command": "markdown.extension.vp.insertImg",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "Auto Doc: 插入图片",
-                "category": "Auto Doc"
-            },
-            {
-                "command": "markdown.extension.vp.previewFile",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "Auto Doc: 预览文件",
-                "category": "Auto Doc"
-            },
-            {
-                "command": "markdown.extension.vp.workstart",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "Auto Doc: 项目启动",
-                "category": "Auto Doc"
-            },
-            {
-                "command": "markdown.extension.vp.workstart",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "Auto Doc: 图片整理（危险）",
-                "category": "Auto Doc"
-            },
-            {
-                "command": "markdown.extension.vp.workstart",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "Auto Doc: 目录整理（危险）",
-                "category": "Auto Doc"
-            }
-        ],
-        "menus": {
-            "editor/context": [
-                {
-                    "command": "markdown.extension.vp.insertImg",
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
-                    "group": "markdown.print@2"
-                },
-                {
-                    "command": "markdown.extension.vp.previewFile",
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
-                    "group": "markdown.print@2"
-                },
-                {
-                    "command": "markdown.extension.vp.workstart",
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
-                    "group": "markdown.print@2"
-                }
-            ]
+        {
+          "command": "markdown.extension.vp.previewFile",
+          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
+          "group": "markdown.print@2"
+        },
+        {
+          "command": "markdown.extension.vp.workstart",
+          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
+          "group": "markdown.print@2"
         }
-    },
-    "capabilities": {
-        "virtualWorkspaces": {
-            "supported": "limited",
-            "description": "In virtual workspaces, some features may not work well."
-        }
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run build",
-        "build": "node ./build/build.js",
-        "dev-build": "webpack --mode development",
-        "dev-compile": "tsc --build --watch --verbose",
-        "pretest": "tsc --build"
-    },
-    "dependencies": {
-        "@neilsustc/markdown-it-katex": "^1.0.0",
-        "entities": "^3.0.1",
-        "grapheme-splitter": "^1.0.4",
-        "highlight.js": "^11.5.1",
-        "image-size": "^0.9.3",
-        "katex": "^0.16.4",
-        "string-similarity": "^4.0.4"
-    },
-    "devDependencies": {
-        "@types/glob": "^7.2.0",
-        "@types/katex": "^0.14.0",
-        "@types/mocha": "^9.1.0",
-        "@types/node": "~14.18.13",
-        "@types/string-similarity": "^4.0.0",
-        "@types/vscode": "~1.63.2",
-        "@vscode/test-electron": "^1.6.2",
-        "glob": "^7.2.0",
-        "mocha": "^9.2.2",
-        "ts-loader": "^9.2.8",
-        "typescript": "~4.5.5",
-        "webpack": "~5.65.0",
-        "webpack-cli": "^4.9.2"
+      ]
     }
+  },
+  "capabilities": {
+    "virtualWorkspaces": {
+      "supported": "limited",
+      "description": "In virtual workspaces, some features may not work well."
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node ./build/build.js",
+    "dev-build": "webpack --mode development",
+    "dev-compile": "tsc --build --watch --verbose",
+    "pretest": "tsc --build"
+  },
+  "dependencies": {
+    "@neilsustc/markdown-it-katex": "^1.0.0",
+    "entities": "^3.0.1",
+    "grapheme-splitter": "^1.0.4",
+    "highlight.js": "^11.5.1",
+    "image-size": "^0.9.3",
+    "js-yaml": "^4.1.0",
+    "katex": "^0.16.4",
+    "string-similarity": "^4.0.4"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/js-yaml": "^4.0.5",
+    "@types/katex": "^0.14.0",
+    "@types/mocha": "^9.1.0",
+    "@types/node": "~14.18.13",
+    "@types/string-similarity": "^4.0.0",
+    "@types/vscode": "~1.63.2",
+    "@vscode/test-electron": "^1.6.2",
+    "glob": "^7.2.0",
+    "mocha": "^9.2.2",
+    "ts-loader": "^9.2.8",
+    "typescript": "~4.5.5",
+    "webpack": "~5.65.0",
+    "webpack-cli": "^4.9.2"
+  }
 }
