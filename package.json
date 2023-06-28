@@ -53,44 +53,6 @@
         }
       ]
     },
-    "colors": [
-      {
-        "id": "markdown.extension.editor.codeSpan.background",
-        "description": "Background color of code spans in the Markdown editor.",
-        "defaults": {
-          "dark": "#00000000",
-          "light": "#00000000",
-          "highContrast": "#00000000"
-        }
-      },
-      {
-        "id": "markdown.extension.editor.codeSpan.border",
-        "description": "Border color of code spans in the Markdown editor.",
-        "defaults": {
-          "dark": "editor.selectionBackground",
-          "light": "editor.selectionBackground",
-          "highContrast": "editor.selectionBackground"
-        }
-      },
-      {
-        "id": "markdown.extension.editor.formattingMark.foreground",
-        "description": "Color of formatting marks (paragraphs, hard line breaks, links, etc.) in the Markdown editor.",
-        "defaults": {
-          "dark": "editorWhitespace.foreground",
-          "light": "editorWhitespace.foreground",
-          "highContrast": "diffEditor.insertedTextBorder"
-        }
-      },
-      {
-        "id": "markdown.extension.editor.trailingSpace.background",
-        "description": "Background color of trailing space (U+0020) characters in the Markdown editor.",
-        "defaults": {
-          "dark": "diffEditor.diagonalFill",
-          "light": "diffEditor.diagonalFill",
-          "highContrast": "editorWhitespace.foreground"
-        }
-      }
-    ],
     "commands": [
       {
         "command": "markdown.extension.vp.insertImg",

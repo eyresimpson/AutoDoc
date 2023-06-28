@@ -91,9 +91,8 @@ function insertImg() {
 // 启动项目的实现
 function workstart() {
   // TODO：可能不兼容其他的命令，后续加一下校验
-  // executeNpmScript("start");
-  // executeScript("vuepress dev docs");
-  common.createStatusBarItem();
+  common.executeNpmScript("start");
+  // common.createStatusBarItem();
 }
 
 // ------ 其他函数（后续迁移到utils） ------
