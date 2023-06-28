@@ -1,13 +1,17 @@
 "use strict";
 
-import { ExtensionContext, languages, window, workspace } from "vscode";
+import { ExtensionContext, commands, languages, window, workspace } from "vscode";
 import * as vuepress from "./vuepress";
 import { DocTreeProvider } from "./provider/DocTreeProvider";
 
 export function activate(context: ExtensionContext) {
+    const docTreeProvider = new DocTreeProvider();
   window.createTreeView("vuepressTree", {
-    treeDataProvider: new DocTreeProvider(),
+    treeDataProvider: docTreeProvider,
   });
+  commands.registerCommand("markdown.extension.vp.refreshEntry",()=>{
+    docTreeProvider.refresh()
+  })
   activateMdExt(context);
   return;
 }

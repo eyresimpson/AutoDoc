@@ -4,6 +4,7 @@ import { commands, ExtensionContext, window, workspace } from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import common from "./tools/common";
+import { DocTreeProvider } from "./provider/DocTreeProvider";
 
 // activate 注册
 export function activate(context: ExtensionContext) {

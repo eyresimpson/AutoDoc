@@ -5,6 +5,14 @@ import { ThemeIcon, workspace } from "vscode";
 import common from "../tools/common";
 
 export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
+
+  private _onDidChangeTreeData: vscode.EventEmitter<DocItem | undefined | null | void> = new vscode.EventEmitter<DocItem | undefined | null | void>();
+  readonly onDidChangeTreeData: vscode.Event<DocItem | undefined | null | void> = this._onDidChangeTreeData.event;
+
+  refresh(): void {
+    this._onDidChangeTreeData.fire();
+  }
+
   getTreeItem(element: DocItem): vscode.TreeItem {
     return element;
   }
