@@ -36,20 +36,10 @@
     "views": {
       "explorer": [
         {
-          "id": "nodeDependencies",
-          "name": "Vuepress",
+          "id": "vuepressTree",
+          "name": "Vuepress 结构树",
           "icon":"images/Markdown-mark.svg",
           "contextualTitle": "Vuepress"
-        }
-      ]
-    },
-    
-    "viewsContainers": {
-      "panel": [
-        {
-          "id": "nodeDependencies",
-          "title": "Package Explorer",
-          "icon": "images/Markdown-mark.svg"
         }
       ]
     },
@@ -85,9 +75,9 @@
         "category": "Auto Doc"
       },
       {
-        "command": "markdown.extension.vp.open",
+        "command": "markdown.extension.vp.openDoc",
         "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-        "title": "打开",
+        "title": "打开文档",
         "category": "Auto Doc"
       }
     ],

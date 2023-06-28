@@ -5,7 +5,7 @@ import * as vuepress from "./vuepress";
 import { DocTreeProvider } from "./provider/DocTreeProvider";
 
 export function activate(context: ExtensionContext) {
-  window.createTreeView("nodeDependencies", {
+  window.createTreeView("vuepressTree", {
     treeDataProvider: new DocTreeProvider(),
   });
   activateMdExt(context);

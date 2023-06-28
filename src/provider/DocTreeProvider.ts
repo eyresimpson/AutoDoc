@@ -30,7 +30,12 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
         "结构",
         vscode.TreeItemCollapsibleState.Collapsed,
         this.analysisMenu(config.navbar),
-        ThemeIcon.Folder
+        ThemeIcon.Folder,
+        {
+          command: 'markdown.extension.vp.openDoc',
+          title: 'Open Document',
+          arguments: ["filePath"],
+        }
       )
     );
     arr.push(
@@ -39,7 +44,12 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
         "结构",
         vscode.TreeItemCollapsibleState.Collapsed,
         this.analysisStruct(config.sidebar),
-        ThemeIcon.Folder
+        ThemeIcon.Folder,
+        {
+          command: 'markdown.extension.vp.openDoc',
+          title: '打开文件夹',
+          arguments: ["filePath"],
+        }
       )
     );
     return arr;
@@ -55,7 +65,12 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
           "菜单",
           vscode.TreeItemCollapsibleState.None,
           [],
-          ThemeIcon.Folder
+          ThemeIcon.Folder,
+          {
+            command: 'markdown.extension.vp.openDoc',
+            title: '打开文件夹',
+            arguments: ["filePath"],
+          }
         )
       );
     }
@@ -73,7 +88,12 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
             "节点",
             vscode.TreeItemCollapsibleState.Collapsed,
             this.analysisStruct(arr[index].children),
-            ThemeIcon.Folder
+            ThemeIcon.Folder,
+            {
+              command: 'markdown.extension.vp.openDoc',
+              title: '打开文件夹',
+              arguments: ["filePath"],
+            }
           )
         );
       } else {
@@ -86,7 +106,12 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
             "文档",
             vscode.TreeItemCollapsibleState.None,
             [],
-            ThemeIcon.File
+            ThemeIcon.File,
+            {
+              command: 'markdown.extension.vp.openDoc',
+              title: '打开文档',
+              arguments: ["filePath"],
+            }
           )
         );
       }
@@ -101,7 +126,8 @@ class DocItem extends vscode.TreeItem {
     private type: string,
     public override readonly collapsibleState: vscode.TreeItemCollapsibleState,
     public children: Array<DocItem>,
-    override iconPath = ThemeIcon.File
+    override iconPath = ThemeIcon.File,
+    public override readonly command: vscode.Command
   ) {
     super(label, collapsibleState);
     this.tooltip = `${this.label}-${this.type}`;

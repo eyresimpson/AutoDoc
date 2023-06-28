@@ -4,6 +4,7 @@ import { commands, ExtensionContext, window, workspace } from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import common from "./tools/common";
+import { log } from "console";
 
 // activate 注册
 export function activate(context: ExtensionContext) {
@@ -14,7 +15,8 @@ export function activate(context: ExtensionContext) {
     ),
     commands.registerCommand("markdown.extension.vp.workstart", () =>
       workstart()
-    )
+    ),
+    commands.registerCommand("markdown.extension.vp.openDoc", (config: any) => openDoc(config))
   );
 }
 
@@ -95,4 +97,8 @@ function workstart() {
   // common.createStatusBarItem();
 }
 
-// ------ 其他函数（后续迁移到utils） ------
+// 打开文件（配置结构树）
+function openDoc(config: any) {
+  console.log("---",config);
+  
+}
