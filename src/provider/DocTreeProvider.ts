@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
+import { ThemeIcon } from "vscode";
 
 export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
   getTreeItem(element: DocItem): vscode.TreeItem {
@@ -31,7 +32,8 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
         "主菜单",
         "结构",
         vscode.TreeItemCollapsibleState.Collapsed,
-        this.analysisMenu(config.navbar)
+        this.analysisMenu(config.navbar),
+        ThemeIcon.Folder
       )
     );
     arr.push(
@@ -39,13 +41,14 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
         "文档章节",
         "结构",
         vscode.TreeItemCollapsibleState.Collapsed,
-        this.analysisStruct(config.sidebar)
+        this.analysisStruct(config.sidebar),
+        ThemeIcon.Folder
       )
     );
     return arr;
   }
 
-  analysisMenu(arr: Array<any>): DocItem[]{
+  analysisMenu(arr: Array<any>): DocItem[] {
     let docItemArr: DocItem[] = [];
     for (let index in arr) {
       docItemArr.push(
@@ -53,7 +56,8 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
           arr[index].text,
           "菜单",
           vscode.TreeItemCollapsibleState.None,
-          []
+          [],
+          ThemeIcon.Folder
         )
       );
     }
@@ -70,7 +74,8 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
             arr[index].text,
             "节点",
             vscode.TreeItemCollapsibleState.Collapsed,
-            this.analysisStruct(arr[index].children)
+            this.analysisStruct(arr[index].children),
+            ThemeIcon.Folder
           )
         );
       } else {
@@ -82,7 +87,8 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
             extractContent(arr[index]),
             "文档",
             vscode.TreeItemCollapsibleState.None,
-            []
+            [],
+            ThemeIcon.File
           )
         );
       }
@@ -96,31 +102,15 @@ class DocItem extends vscode.TreeItem {
     public override readonly label: string,
     private type: string,
     public override readonly collapsibleState: vscode.TreeItemCollapsibleState,
-    public children: Array<DocItem>
+    public children: Array<DocItem>,
+    override iconPath = ThemeIcon.File
   ) {
     super(label, collapsibleState);
     this.tooltip = `${this.label}-${this.type}`;
     this.description = this.type;
   }
 
-  override iconPath = {
-    light: path.join(
-      __filename,
-      "..",
-      "..",
-      "resources",
-      "light",
-      "dependency.svg"
-    ),
-    dark: path.join(
-      __filename,
-      "..",
-      "..",
-      "resources",
-      "dark",
-      "dependency.svg"
-    ),
-  };
+  
 }
 
 function extractDefaultThemeConfigFromFile(filePath: string): any {
@@ -149,12 +139,12 @@ function extractContent(input: string): string {
   if (input.endsWith("/")) {
     lastPart = parts[parts.length - 2]; // 获取倒数第二个分割后的部分
   } else {
-    if(input.endsWith(".md")){
+    if (input.endsWith(".md")) {
       lastPart = parts[parts.length - 1].split(".md")[0];
-    }else{
+    } else {
       lastPart = parts[parts.length - 1]; // 获取倒数第二个分割后的部分
     }
-    
   }
   return lastPart;
 }
+
