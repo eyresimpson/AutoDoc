@@ -4,7 +4,6 @@ import { commands, ExtensionContext, window, workspace } from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import common from "./tools/common";
-import { log } from "console";
 
 // activate 注册
 export function activate(context: ExtensionContext) {
