@@ -15,11 +15,7 @@ const { createLogger } = require("./logger.js");
 
 const logger = createLogger("Compilation");
 
-/**
- * @type {boolean}
- * @see {@link https://docs.github.com/en/actions/reference/environment-variables}
- * @see {@link https://github.com/actions/runner/blob/main/src/Runner.Sdk/ProcessInvoker.cs}
- */
+
 const Env_Is_Ci =
   process.env["CI"] === "true" || process.env["GITHUB_ACTIONS"] === "true";
 

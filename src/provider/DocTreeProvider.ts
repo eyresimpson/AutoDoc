@@ -1,7 +1,8 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
-import { ThemeIcon } from "vscode";
+import { ThemeIcon, workspace } from "vscode";
+import common from "../tools/common";
 
 export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
   getTreeItem(element: DocItem): vscode.TreeItem {
@@ -14,18 +15,14 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
       return Promise.resolve(element.children);
     } else {
       // 顶级节点需要从配置中赋值
-      return Promise.resolve(
-        this.getStructInConfig(
-          "/Users/eyresimpson/Code/zerocloud-doc/source-codes/zerocloud-doc/docs/.vuepress/config.js"
-        )
-      );
+      return Promise.resolve(this.getStructInConfig(common.getConfigPath()));
     }
   }
 
   // 尝试从配置文件中获取结构
   getStructInConfig(path: string): DocItem[] {
     // 读取js
-    let config = extractDefaultThemeConfigFromFile(path);
+    let config = common.extractDefaultThemeConfigFromFile(path);
     let arr = [];
     arr.push(
       new DocItem(
@@ -48,6 +45,7 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
     return arr;
   }
 
+  // 分析菜单结构
   analysisMenu(arr: Array<any>): DocItem[] {
     let docItemArr: DocItem[] = [];
     for (let index in arr) {
@@ -63,7 +61,7 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
     }
     return docItemArr;
   }
-
+  // 分析数据结构树
   analysisStruct(arr: Array<any>): DocItem[] {
     let docItemArr: DocItem[] = [];
     for (let index in arr) {
@@ -84,7 +82,7 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
         // TODO:后续应该改成具体标题的
         docItemArr.push(
           new DocItem(
-            extractContent(arr[index]),
+            common.extractContent(arr[index]),
             "文档",
             vscode.TreeItemCollapsibleState.None,
             [],
@@ -109,42 +107,4 @@ class DocItem extends vscode.TreeItem {
     this.tooltip = `${this.label}-${this.type}`;
     this.description = this.type;
   }
-
-  
 }
-
-function extractDefaultThemeConfigFromFile(filePath: string): any {
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-
-  // 使用正则表达式提取出 defaultTheme 方法的参数
-  const defaultThemeMatch = fileContent.match(/defaultTheme\(([\s\S]*?)\)/);
-  if (defaultThemeMatch && defaultThemeMatch.length > 1) {
-    const defaultThemeConfigString = defaultThemeMatch[1];
-
-    // 解析 JSON 字符串为 JavaScript 对象
-    try {
-      const defaultThemeConfig = eval(`(${defaultThemeConfigString})`);
-      return defaultThemeConfig;
-    } catch (error) {
-      console.error("Failed to parse defaultTheme config:", error);
-    }
-  }
-
-  return null;
-}
-
-function extractContent(input: string): string {
-  const parts = input.split("/"); // 将字符串按照斜杠进行分割
-  let lastPart = "";
-  if (input.endsWith("/")) {
-    lastPart = parts[parts.length - 2]; // 获取倒数第二个分割后的部分
-  } else {
-    if (input.endsWith(".md")) {
-      lastPart = parts[parts.length - 1].split(".md")[0];
-    } else {
-      lastPart = parts[parts.length - 1]; // 获取倒数第二个分割后的部分
-    }
-  }
-  return lastPart;
-}
-

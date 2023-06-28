@@ -9,7 +9,6 @@
     "vscode": "^1.72.0"
   },
   "categories": [
-    "Programming Languages",
     "Formatters",
     "Other"
   ],
@@ -19,11 +18,11 @@
     "doc"
   ],
   "bugs": {
-    "url": "https://github.com/yzhang-gh/vscode-markdown/issues"
+    "url": "https://github.com/eyresimpson/AutoDoc/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yzhang-gh/vscode-markdown"
+    "url": "https://github.com/eyresimpson/AutoDoc"
   },
   "license": "MIT",
   "activationEvents": [
@@ -38,7 +37,19 @@
       "explorer": [
         {
           "id": "nodeDependencies",
-          "name": "Vuepress"
+          "name": "Vuepress",
+          "icon":"images/Markdown-mark.svg",
+          "contextualTitle": "Vuepress"
+        }
+      ]
+    },
+    
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "nodeDependencies",
+          "title": "Package Explorer",
+          "icon": "images/Markdown-mark.svg"
         }
       ]
     },
