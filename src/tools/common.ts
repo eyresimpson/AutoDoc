@@ -6,6 +6,7 @@ import {
   Task,
   tasks,
   TaskScope,
+  Uri,
   window,
   workspace,
 } from "vscode";
@@ -151,6 +152,33 @@ function getImgFolderPath() {
   );
 }
 
+// 获取Doc目录
+function getDocFolderPath() {
+  const workspaceFolders = workspace.workspaceFolders;
+  return path.join(workspaceFolders![0].uri.fsPath, "docs");
+}
+
+// 尝试读取文件第一行的名称
+function getFileTitle(filePath: string) {
+  const fileUri = Uri.file(filePath);
+  const document = workspace.openTextDocument(fileUri);
+
+  return new Promise<string | undefined>((resolve) => {
+    document.then((doc) => {
+      const lines: string[] = [];
+      for (let i = 0; i < doc.lineCount; i++) {
+        const line = doc.lineAt(i);
+        if (line.text.startsWith("# ")) {
+          const headingText = line.text.substring(2).trim();
+          resolve(headingText);
+          return;
+        }
+      }
+      resolve(undefined);
+    });
+  });
+}
+
 export default {
   extractDefaultThemeConfigFromFile,
   extractContent,
@@ -163,4 +191,6 @@ export default {
   getCurrentDateTime,
   getConfigPath,
   getImgFolderPath,
+  getDocFolderPath,
+  getFileTitle,
 };

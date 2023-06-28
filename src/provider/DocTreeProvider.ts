@@ -1,13 +1,16 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
-import { ThemeIcon, workspace } from "vscode";
+import { Command, ThemeIcon, workspace } from "vscode";
 import common from "../tools/common";
 
 export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
-
-  private _onDidChangeTreeData: vscode.EventEmitter<DocItem | undefined | null | void> = new vscode.EventEmitter<DocItem | undefined | null | void>();
-  readonly onDidChangeTreeData: vscode.Event<DocItem | undefined | null | void> = this._onDidChangeTreeData.event;
+  private _onDidChangeTreeData: vscode.EventEmitter<
+    DocItem | undefined | null | void
+  > = new vscode.EventEmitter<DocItem | undefined | null | void>();
+  readonly onDidChangeTreeData: vscode.Event<
+    DocItem | undefined | null | void
+  > = this._onDidChangeTreeData.event;
 
   refresh(): void {
     this._onDidChangeTreeData.fire();
@@ -34,29 +37,27 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
     let arr = [];
     arr.push(
       new DocItem(
-        "主菜单",
-        "结构",
+        "菜单目录",
+        "【框架】",
         vscode.TreeItemCollapsibleState.Collapsed,
         this.analysisMenu(config.navbar),
         ThemeIcon.Folder,
         {
-          command: 'markdown.extension.vp.openDoc',
-          title: 'Open Document',
-          arguments: ["filePath"],
+          title: "",
+          command: "noah.vp.previewFile",
         }
       )
     );
     arr.push(
       new DocItem(
         "文档章节",
-        "结构",
+        "【框架】",
         vscode.TreeItemCollapsibleState.Collapsed,
         this.analysisStruct(config.sidebar),
         ThemeIcon.Folder,
         {
-          command: 'markdown.extension.vp.openDoc',
-          title: '打开文件夹',
-          arguments: ["filePath"],
+          title: "",
+          command: "noah.vp.previewFile",
         }
       )
     );
@@ -70,14 +71,13 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
       docItemArr.push(
         new DocItem(
           arr[index].text,
-          "菜单",
+          "【菜单】",
           vscode.TreeItemCollapsibleState.None,
           [],
           ThemeIcon.Folder,
           {
-            command: 'markdown.extension.vp.openDoc',
-            title: '打开文件夹',
-            arguments: ["filePath"],
+            title: "",
+            command: "noah.vp.previewFile",
           }
         )
       );
@@ -93,14 +93,13 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
         docItemArr.push(
           new DocItem(
             arr[index].text,
-            "节点",
+            "【节点】",
             vscode.TreeItemCollapsibleState.Collapsed,
             this.analysisStruct(arr[index].children),
             ThemeIcon.Folder,
             {
-              command: 'markdown.extension.vp.openDoc',
-              title: '打开文件夹',
-              arguments: ["filePath"],
+              title: "",
+              command: "noah.vp.previewFile",
             }
           )
         );
@@ -108,20 +107,34 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
         if (typeof arr[index] != "string") continue;
         // 没有子数组，整理文档存入
         // TODO:后续应该改成具体标题的
-        docItemArr.push(
-          new DocItem(
-            common.extractContent(arr[index]),
-            "文档",
-            vscode.TreeItemCollapsibleState.None,
-            [],
-            ThemeIcon.File,
-            {
-              command: 'markdown.extension.vp.openDoc',
-              title: '打开文档',
-              arguments: ["filePath"],
-            }
-          )
-        );
+        let filePath = common.getDocFolderPath();
+
+        if (arr[index].endsWith(".md") || arr[index].endsWith(".MD")) {
+          filePath = path.join(filePath, arr[index]);
+        } else {
+          try {
+            filePath = path.join(filePath, arr[index] + "README.md");
+          } catch (error) {
+            filePath = path.join(filePath, arr[index] + "readme.md");
+          }
+        }
+        common.getFileTitle(filePath).then((name) => {
+          docItemArr.push(
+            new DocItem(
+              // common.extractContent(arr[index]),
+              name || "",
+              "【文档】",
+              vscode.TreeItemCollapsibleState.None,
+              [],
+              ThemeIcon.File,
+              {
+                command: "noah.vp.openDoc",
+                title: "打开文档",
+                arguments: [arr[index]],
+              }
+            )
+          );
+        });
       }
     }
     return docItemArr;

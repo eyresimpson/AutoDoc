@@ -13,9 +13,8 @@
     "Other"
   ],
   "keywords": [
-    "markdown",
     "vuepress",
-    "doc"
+    "document"
   ],
   "bugs": {
     "url": "https://github.com/eyresimpson/AutoDoc/issues"
@@ -43,73 +42,107 @@
         }
       ]
     },
+    "viewsWelcome": [
+      {
+        "view": "explorer",
+        "contents": "当前打开的文件夹可能不是vuepress项目，或此项目的config配置有严重的错误",
+        "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1"
+      }
+    ],
     "commands": [
       {
-        "command": "markdown.extension.vp.insertImg",
+        "command": "noah.vp.insertImg",
         "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
         "title": "Auto Doc: 插入图片",
         "category": "Auto Doc"
       },
       {
-        "command": "markdown.extension.vp.previewFile",
+        "command": "noah.vp.previewFile",
         "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
         "title": "Auto Doc: 预览文件",
         "category": "Auto Doc"
       },
       {
-        "command": "markdown.extension.vp.workstart",
+        "command": "noah.vp.workstart",
         "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
         "title": "Auto Doc: 项目启动",
         "category": "Auto Doc"
       },
       {
-        "command": "markdown.extension.vp.ss",
+        "command": "noah.vp.ss",
         "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
         "title": "Auto Doc: 图片整理（危险）",
         "category": "Auto Doc"
       },
       {
-        "command": "markdown.extension.vp.s2",
+        "command": "noah.vp.s2",
         "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
         "title": "Auto Doc: 目录整理（危险）",
         "category": "Auto Doc"
       },
       {
-        "command": "markdown.extension.vp.openDoc",
-        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-        "title": "打开文档",
-        "category": "Auto Doc"
+        "command": "noah.vp.refreshEntry",
+        "title": "刷新结构树",
+        "icon": "$(refresh)"
       },
       {
-        "command": "markdown.extension.vp.refreshEntry",
-        "title": "刷新Vuepress结构树",
-        "icon": {
-          "light": "images/Markdown-mark.svg",
-          "dark": "images/Markdown-mark.svg"
-        }
+        "command": "noah.vp.openDoc",
+        "title": "打开此文档",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "noah.vp.addDoc",
+        "title": "添加文件",
+        "icon": "$(add)"
+      },
+      {
+        "command": "noah.vp.addDir",
+        "title": "添加节点",
+        "icon": "$(symbol-class)"
+      },
+      {
+        "command": "noah.vp.delEle",
+        "title": "删除元素",
+        "icon": "$(trash)"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "markdown.extension.vp.insertImg",
+          "command": "noah.vp.insertImg",
           "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
           "group": "markdown.print@2"
         },
         {
-          "command": "markdown.extension.vp.previewFile",
+          "command": "noah.vp.previewFile",
           "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
           "group": "markdown.print@2"
         },
         {
-          "command": "markdown.extension.vp.workstart",
+          "command": "noah.vp.workstart",
           "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
           "group": "markdown.print@2"
-        },
+        }
+      ],
+      "view/title": [
         {
-          "command": "markdown.extension.vp.refreshEntry",
+          "command": "noah.vp.refreshEntry",
           "when": "view == vuepressTree",
           "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "noah.vp.addDoc",
+          "when": "view == vuepressTree"
+        },
+        {
+          "command": "noah.vp.addDir",
+          "when": "view == vuepressTree"
+        },
+        {
+          "command": "noah.vp.delEle",
+          "when": "view == vuepressTree"
         }
       ]
     }

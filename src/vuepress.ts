@@ -1,6 +1,15 @@
 "use strict";
 
-import { commands, ExtensionContext, window, workspace } from "vscode";
+import {
+  commands,
+  ExtensionContext,
+  notebooks,
+  TextEdit,
+  Uri,
+  window,
+  workspace,
+  WorkspaceEdit,
+} from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import common from "./tools/common";
@@ -10,13 +19,16 @@ import { DocTreeProvider } from "./provider/DocTreeProvider";
 export function activate(context: ExtensionContext) {
   // 注册命令
   context.subscriptions.push(
-    commands.registerCommand("markdown.extension.vp.insertImg", () =>
-      insertImg()
+    // 插入图片事件
+    commands.registerCommand("noah.vp.insertImg", () => insertImg()),
+    // 启动项目
+    commands.registerCommand("noah.vp.workstart", () => workstart()),
+    // 打开文档（注意，必须只能一定要在项目中点击打开，或者给他传参也可以
+    commands.registerCommand("noah.vp.openDoc", (config: any) =>
+      openDoc(config)
     ),
-    commands.registerCommand("markdown.extension.vp.workstart", () =>
-      workstart()
-    ),
-    commands.registerCommand("markdown.extension.vp.openDoc", (config: any) => openDoc(config))
+    // 这东西就是空的，如果需要点击菜单、节点时做点啥请重新建 command，不要用这个
+    commands.registerCommand("noah.vp.previewFile", () => {})
   );
 }
 
@@ -98,7 +110,17 @@ function workstart() {
 }
 
 // 打开文件（配置结构树）
-function openDoc(config: any) {
-  console.log("---",config);
-  
+function openDoc(config: string) {
+  let filePath = common.getDocFolderPath();
+
+  if (config.endsWith(".md") || config.endsWith(".MD")) {
+    filePath = path.join(filePath, config);
+  } else {
+    try {
+      filePath = path.join(filePath, config + "README.md");
+    } catch (error) {
+      filePath = path.join(filePath, config + "readme.md");
+    }
+  }
+  commands.executeCommand("vscode.open", Uri.parse(filePath));
 }

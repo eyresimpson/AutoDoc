@@ -9,7 +9,7 @@ export function activate(context: ExtensionContext) {
   window.createTreeView("vuepressTree", {
     treeDataProvider: docTreeProvider,
   });
-  commands.registerCommand("markdown.extension.vp.refreshEntry",()=>{
+  commands.registerCommand("noah.vp.refreshEntry",()=>{
     docTreeProvider.refresh()
   })
   activateMdExt(context);
