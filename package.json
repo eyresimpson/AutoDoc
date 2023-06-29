@@ -4,7 +4,7 @@
   "description": "Vuepress 文档编写增强工具，可以自动维护config结构和图片内容",
   "icon": "images/Markdown-mark.png",
   "version": "0.1.0",
-  "publisher": "Noah Jones",
+  "publisher": "Tineaine",
   "engines": {
     "vscode": "^1.72.0"
   },

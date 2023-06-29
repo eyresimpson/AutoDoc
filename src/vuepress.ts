@@ -3,18 +3,16 @@
 import {
   commands,
   ExtensionContext,
-  notebooks,
-  TextEdit,
+  TreeItem,
   Uri,
   window,
   workspace,
-  WorkspaceEdit,
 } from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import common from "./tools/commonTools";
-import { DocTreeProvider } from "./provider/DocTreeProvider";
 import pathTools from "./tools/pathTools";
+import { VuepressConfig } from "./tools/configTools";
 
 // activate 注册
 export function activate(context: ExtensionContext) {
@@ -27,6 +25,10 @@ export function activate(context: ExtensionContext) {
     // 打开文档（注意，必须只能一定要在项目中点击打开，或者给他传参也可以
     commands.registerCommand("noah.vp.openDoc", (config: any) =>
       openDoc(config)
+    ),
+    // 新建节点（注意，必须只能一定要在项目中点击打开，或者给他传参也可以
+    commands.registerCommand("noah.vp.addDir", (config: any) =>
+      createNode(config)
     ),
     // 这东西就是空的，如果需要点击菜单、节点时做点啥请重新建 command，不要用这个
     commands.registerCommand("noah.vp.previewFile", () => {})
@@ -112,6 +114,37 @@ function workstart() {
 
 // 打开文件（配置结构树）
 function openDoc(config: string) {
+  commands.executeCommand("vscode.open", Uri.parse(mdFilePath(config)));
+}
+
+// 新建节点
+function createNode(config: any) {
+  let configPath;
+  if (config.type) {
+    if (config.type === "【菜单】" || config.type === "【框架】") {
+      return;
+    }
+    configPath = findPathInTree(config);
+  } else {
+    configPath = config;
+  }
+  // 目标地址： mdFilePath(configPath)
+  let vuepress = new VuepressConfig();
+  // console.log(vuepress);
+  
+  // 修改配置文件
+}
+// 删除节点
+function deleteNode() {}
+
+// 新建文档
+function createDocument() {}
+
+// 删除文档
+
+function deleteDocument() {}
+
+function mdFilePath(config: any) {
   let filePath = pathTools.getDocFolderPath();
 
   if (config.endsWith(".md") || config.endsWith(".MD")) {
@@ -123,5 +156,27 @@ function openDoc(config: string) {
       filePath = path.join(filePath, config + "readme.md");
     }
   }
-  commands.executeCommand("vscode.open", Uri.parse(filePath));
+  return filePath;
+}
+
+// 提供需要提供一个 TreeItem 对象，返回其对应的目录路径
+function findPathInTree(tree: any) {
+  // 目录
+  let dirPath: string;
+  // let index:number;
+  if (tree.type === "【文档】") {
+    return tree.command.arguments[0];
+  } else if (tree.type === "【节点】" || tree.children.length > 0) {
+    dirPath = removeLastSegment(findPathInTree(tree.children[0]));
+  } else {
+    return "";
+  }
+  return dirPath;
+}
+
+// 移除最后的一段地址
+function removeLastSegment(str: string): string {
+  const segments = str.split("/");
+  segments.pop(); // 移除最后一个元素
+  return segments.join("/") + "/";
 }

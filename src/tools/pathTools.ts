@@ -2,7 +2,7 @@ import path = require("path");
 import { window, workspace } from "vscode";
 import * as fs from "fs";
 
-// 获取配置文件夹
+// 获取配置文件位置
 function getConfigPath() {
     const workspaceFolders = workspace.workspaceFolders;
     return path.join(workspaceFolders![0].uri.fsPath, "docs/.vuepress/config.js");
