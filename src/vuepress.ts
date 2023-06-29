@@ -12,8 +12,9 @@ import {
 } from "vscode";
 import * as fs from "fs";
 import * as path from "path";
-import common from "./tools/common";
+import common from "./tools/commonTools";
 import { DocTreeProvider } from "./provider/DocTreeProvider";
+import pathTools from "./tools/pathTools";
 
 // activate 注册
 export function activate(context: ExtensionContext) {
@@ -74,10 +75,10 @@ function insertImg() {
       // 拼接目标路径
       // 插入的文档必须位于 docs/section 中
       imgPath = path.join(
-        common.getImgFolderPath(),
-        common.getCurrentDocumentRelativePath()!
+        pathTools.getImgFolderPath(),
+        pathTools.getCurrentDocumentRelativePath()!
       );
-      common.ensureDirectoryExists(imgPath);
+      pathTools.ensureDirectoryExists(imgPath);
       // 将图片保存到指定位置
       fs.copyFile(
         urls[0].path,
@@ -91,7 +92,7 @@ function insertImg() {
           // 组合图片的 Url
           common.insertTextAtCursorPosition(
             "<img :src=\"$withBase('/imgs/" +
-              common.getCurrentDocumentRelativePath() +
+              pathTools.getCurrentDocumentRelativePath() +
               "/" +
               imgFileName +
               suffix +
@@ -111,7 +112,7 @@ function workstart() {
 
 // 打开文件（配置结构树）
 function openDoc(config: string) {
-  let filePath = common.getDocFolderPath();
+  let filePath = pathTools.getDocFolderPath();
 
   if (config.endsWith(".md") || config.endsWith(".MD")) {
     filePath = path.join(filePath, config);
