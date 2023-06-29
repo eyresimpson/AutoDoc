@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import * as path from "path";
 import {
   ShellExecution,
   StatusBarAlignment,
@@ -62,33 +61,7 @@ function getCurrentDateTime(): string {
   return `${day}${month}${year}${hours}${minutes}${seconds}`;
 }
 
-// 检查创建目录（检查目录是否存在，不存在创建）
-function ensureDirectoryExists(directoryPath: string): void {
-  if (!fs.existsSync(directoryPath)) {
-    fs.mkdirSync(directoryPath, { recursive: true });
-    console.log("【INFO】在 ", directoryPath, " 创建目录");
-  }
-}
 
-// 获取相对路径（限定为用户自定义路径，不含文件名）
-function getCurrentDocumentRelativePath(): string | undefined {
-  const activeTextEditor = window.activeTextEditor;
-  if (activeTextEditor) {
-    const document = activeTextEditor.document;
-    if (document) {
-      const workspaceFolderPath = workspace.rootPath;
-      if (workspaceFolderPath) {
-        return path.parse(
-          path.relative(
-            path.join(workspaceFolderPath, "/docs/section/"),
-            document.fileName
-          )
-        ).dir;
-      }
-    }
-  }
-  return;
-}
 
 // 在光标处插入文本
 function insertTextAtCursorPosition(text: string): Thenable<boolean> {
@@ -139,24 +112,6 @@ function createStatusBarItem() {
   statusBarItem.show();
 }
 
-function getConfigPath() {
-  const workspaceFolders = workspace.workspaceFolders;
-  return path.join(workspaceFolders![0].uri.fsPath, "docs/.vuepress/config.js");
-}
-
-function getImgFolderPath() {
-  const workspaceFolders = workspace.workspaceFolders;
-  return path.join(
-    workspaceFolders![0].uri.fsPath,
-    "docs/.vuepress/public/imgs/"
-  );
-}
-
-// 获取Doc目录
-function getDocFolderPath() {
-  const workspaceFolders = workspace.workspaceFolders;
-  return path.join(workspaceFolders![0].uri.fsPath, "docs");
-}
 
 // 尝试读取文件第一行的名称
 function getFileTitle(filePath: string) {
@@ -186,11 +141,6 @@ export default {
   executeScript,
   executeNpmScript,
   insertTextAtCursorPosition,
-  getCurrentDocumentRelativePath,
-  ensureDirectoryExists,
   getCurrentDateTime,
-  getConfigPath,
-  getImgFolderPath,
-  getDocFolderPath,
   getFileTitle,
 };

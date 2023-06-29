@@ -2,7 +2,8 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import { Command, ThemeIcon, workspace } from "vscode";
-import common from "../tools/common";
+import common from "../tools/commonTools";
+import pathTools from "../tools/pathTools";
 
 export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<
@@ -26,7 +27,7 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
       return Promise.resolve(element.children);
     } else {
       // 顶级节点需要从配置中赋值
-      return Promise.resolve(this.getStructInConfig(common.getConfigPath()));
+      return Promise.resolve(this.getStructInConfig(pathTools.getConfigPath()));
     }
   }
 
@@ -107,7 +108,7 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
         if (typeof arr[index] != "string") continue;
         // 没有子数组，整理文档存入
         // TODO:后续应该改成具体标题的
-        let filePath = common.getDocFolderPath();
+        let filePath = pathTools.getDocFolderPath();
 
         if (arr[index].endsWith(".md") || arr[index].endsWith(".MD")) {
           filePath = path.join(filePath, arr[index]);
