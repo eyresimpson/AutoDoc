@@ -12,6 +12,8 @@ import * as fs from "fs";
 import * as path from "path";
 import common from "./tools/commonTools";
 import pathTools from "./tools/pathTools";
+import systemTools from "./tools/systemTools"
+import fileTools from "./tools/fileTools"
 import { VuepressConfig } from "./tools/configTools";
 
 // activate 注册
@@ -20,6 +22,8 @@ export function activate(context: ExtensionContext) {
   context.subscriptions.push(
     // 插入图片事件
     commands.registerCommand("noah.vp.insertImg", () => insertImg()),
+    // 从剪贴板插入图片事件
+    commands.registerCommand("noah.vp.insertImgByClipboardy", () => insertImgByClipboardy()),
     // 启动项目
     commands.registerCommand("noah.vp.workstart", () => workstart()),
     // 打开文档（注意，必须只能一定要在项目中点击打开，或者给他传参也可以
@@ -73,7 +77,7 @@ function insertImg() {
       // 根据当前日期时间拼接文件名
       imgFileName = fileName + "_" + common.getCurrentDateTime();
       // 获取文件后缀名
-      suffix = path.parse(urls[0].path).ext;
+      suffix = path.parse(urls[0].fsPath).ext;
       // 拼接目标路径
       // 插入的文档必须位于 docs/section 中
       imgPath = path.join(
@@ -83,7 +87,7 @@ function insertImg() {
       pathTools.ensureDirectoryExists(imgPath);
       // 将图片保存到指定位置
       fs.copyFile(
-        urls[0].path,
+        urls[0].fsPath,
         path.join(imgPath, imgFileName + suffix),
         (err) => {
           if (err) {
@@ -179,4 +183,84 @@ function removeLastSegment(str: string): string {
   const segments = str.split("/");
   segments.pop(); // 移除最后一个元素
   return segments.join("/") + "/";
+}
+
+// 插入剪贴板图片的实现
+function insertImgByClipboardy() {
+  let imagePath = "/Users/eyresimpson/Code/OpenSource/AutoDoc/src/tools/fileTools.jpg";
+  systemTools.saveClipboardImageToFile(imagePath,()=>{
+    
+      if (!imagePath) return;
+      if (imagePath === 'no image') {
+          window.setStatusBarMessage('Done', 3000);
+          window.showInformationMessage('There is not a image in clipboard.');
+          return;
+      }
+  });
+  // // 打开对话框，要求用户选择图片
+  // window
+  //   .showOpenDialog({
+  //     title: "选择要插入的图片文件",
+  //     openLabel: "插入此图片",
+  //     canSelectFiles: true,
+  //     canSelectFolders: false,
+  //     canSelectMany: true,
+  //   })
+  //   .then((urls: any) => {
+  //     if (urls == undefined) return;
+  //     const workspaceFolders = workspace.workspaceFolders;
+  //     const activeTextEditor = window.activeTextEditor;
+  //     // 图片文件命名规则：当前文档名称 + 日期时间，如 formDesign_230627090748.png
+  //     let imgFileName = "";
+  //     // 图片文件保存路径
+  //     let imgPath = "";
+  //     // 图片后缀名
+  //     let suffix = "";
+  //     if (!activeTextEditor) {
+  //       console.log("【ERROR】无法获取当前打开的文档！");
+  //       return;
+  //     }
+  //     let document = activeTextEditor.document;
+  //     // 获取当前文档路径
+  //     let fileName = "";
+  //     if (document) {
+  //       const fileNameWithExtension = path.basename(document.fileName); // 获取带有后缀名的文件名
+  //       fileName = path.parse(fileNameWithExtension).name; // 排除后缀名
+  //     } else {
+  //       console.log("【ERROR】无法获取当前打开的文档！");
+  //       return;
+  //     }
+  //     // 根据当前日期时间拼接文件名
+  //     imgFileName = fileName + "_" + common.getCurrentDateTime();
+  //     // 获取文件后缀名
+  //     suffix = path.parse(urls[0].fsPath).ext;
+  //     // 拼接目标路径
+  //     // 插入的文档必须位于 docs/section 中
+  //     imgPath = path.join(
+  //       pathTools.getImgFolderPath(),
+  //       pathTools.getCurrentDocumentRelativePath()!
+  //     );
+  //     pathTools.ensureDirectoryExists(imgPath);
+  //     // 将图片保存到指定位置
+  //     fs.copyFile(
+  //       urls[0].fsPath,
+  //       path.join(imgPath, imgFileName + suffix),
+  //       (err) => {
+  //         if (err) {
+  //           console.error("【ERROR】权限或目录异常，无法复制文件", err);
+  //           return;
+  //         }
+  //         // TODO: 对图片进行压缩（如果需要）
+  //         // 组合图片的 Url
+  //         common.insertTextAtCursorPosition(
+  //           "<img :src=\"$withBase('/imgs/" +
+  //             pathTools.getCurrentDocumentRelativePath() +
+  //             "/" +
+  //             imgFileName +
+  //             suffix +
+  //             "')\" />"
+  //         );
+  //       }
+  //     );
+  //   });
 }

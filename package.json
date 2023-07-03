@@ -57,6 +57,12 @@
         "category": "Auto Doc"
       },
       {
+        "command": "noah.vp.insertImgByClipboardy",
+        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+        "title": "Auto Doc: 从剪贴板插入图片",
+        "category": "Auto Doc"
+      },
+      {
         "command": "noah.vp.previewFile",
         "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
         "title": "Auto Doc: 预览文件",
@@ -108,6 +114,11 @@
     ],
     "menus": {
       "editor/context": [
+        {
+          "command": "noah.vp.insertImgByClipboardy",
+          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
+          "group": "markdown.print@2"
+        },
         {
           "command": "noah.vp.insertImg",
           "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
@@ -161,6 +172,7 @@
     "pretest": "tsc --build"
   },
   "dependencies": {
+    "clipboardy": "^3.0.0",
     "entities": "^3.0.1",
     "grapheme-splitter": "^1.0.4",
     "highlight.js": "^11.5.1",
