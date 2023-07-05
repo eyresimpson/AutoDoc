@@ -2,7 +2,7 @@
 
 > 🍉 Noah Jones
 >
-> Version 230703 Pre (0.1.1)
+> Version 230703 Pre (0.1.2)
 
 ## 🍵 简介
 

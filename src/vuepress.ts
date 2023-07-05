@@ -98,14 +98,10 @@ function insertImg() {
             return;
           }
           // TODO: 对图片进行压缩（如果需要）
+          const finalPath = path.join("/imgs/",pathTools.getCurrentDocumentRelativePath()!, imgFileName + suffix)
           // 组合图片的 Url
           common.insertTextAtCursorPosition(
-            "<img :src=\"$withBase('/imgs/" +
-              pathTools.getCurrentDocumentRelativePath() +
-              "/" +
-              imgFileName +
-              suffix +
-              "')\" />"
+            "<img :src=\"$withBase('" + finalPath + "')\" />"
           );
         }
       );
@@ -234,13 +230,9 @@ function insertImgByClipboardy() {
       }
     );
     commands.executeCommand("undo").then(() => {
+      const finalPath = path.join("/imgs/",pathTools.getCurrentDocumentRelativePath()!, imgFileName + suffix)
       common.insertTextAtCursorPosition(
-        "<img :src=\"$withBase('/imgs/" +
-          pathTools.getCurrentDocumentRelativePath() +
-          "/" +
-          imgFileName +
-          suffix +
-          "')\" />"
+        "<img :src=\"$withBase('" + finalPath + "')\" />"
       );
     });
   },1000);
