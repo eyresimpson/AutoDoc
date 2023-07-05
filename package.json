@@ -153,7 +153,7 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "vsce prepublish",
+    "vscode:prepublish": "npm run build",
     "build": "node ./build/build.js",
     "dev-build": "webpack --mode development",
     "dev-compile": "tsc --build --watch --verbose",
