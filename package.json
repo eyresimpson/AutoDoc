@@ -75,20 +75,8 @@
         "category": "Auto Doc"
       },
       {
-        "command": "noah.vp.ss",
-        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-        "title": "Auto Doc: 图片整理（危险）",
-        "category": "Auto Doc"
-      },
-      {
-        "command": "noah.vp.s2",
-        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-        "title": "Auto Doc: 目录整理（危险）",
-        "category": "Auto Doc"
-      },
-      {
         "command": "noah.vp.refreshEntry",
-        "title": "刷新结构树",
+        "title": "Auto Doc: 刷新结构树",
         "icon": "$(refresh)"
       },
       {

@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
-import * as fs from "fs";
 import * as path from "path";
-import { Command, ThemeIcon, workspace } from "vscode";
+import { ThemeIcon } from "vscode";
 import common from "../tools/commonTools";
 import pathTools from "../tools/pathTools";
 

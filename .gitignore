@@ -1,4 +1,8 @@
+# 生成的目录
 dist/
+# 忽略 nod_modules
 node_modules/
+# 忽略生成的插件，此插件会在github和vsc store中发布
 *.vsix
+# 忽略 out
 out/
