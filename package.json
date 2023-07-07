@@ -52,75 +52,63 @@
     "commands": [
       {
         "command": "noah.vp.insertImg",
-        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-        "title": "Auto Doc: 插入图片",
-        "category": "Auto Doc"
+        "title": "元素: 插入图片",
+        "category": "Auto Doc",
+        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/"
       },
       {
         "command": "noah.vp.insertImgByClipboardy",
-        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-        "title": "Auto Doc: 从剪贴板插入图片",
-        "category": "Auto Doc"
+        "title": "元素: 从剪贴板插入图片",
+        "category": "Auto Doc",
+        "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/"
       },
       {
         "command": "noah.vp.previewFile",
         "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-        "title": "Auto Doc: 预览文件",
+        "title": "项目: 预览文件",
         "category": "Auto Doc"
       },
       {
         "command": "noah.vp.workstart",
         "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-        "title": "Auto Doc: 项目启动",
+        "title": "项目: 项目启动",
         "category": "Auto Doc"
       },
       {
         "command": "noah.vp.refreshEntry",
-        "title": "Auto Doc: 刷新结构树",
+        "title": "命令: 刷新结构树",
         "icon": "$(refresh)"
       },
       {
         "command": "noah.vp.openDoc",
-        "title": "打开此文档",
+        "title": "命令: 打开此文档",
         "icon": "$(edit)"
       },
       {
         "command": "noah.vp.addDoc",
-        "title": "添加文件",
+        "title": "命令: 添加文件",
         "icon": "$(add)"
       },
       {
         "command": "noah.vp.addDir",
-        "title": "添加节点",
+        "title": "命令: 添加节点",
         "icon": "$(symbol-class)"
       },
       {
         "command": "noah.vp.delEle",
-        "title": "删除元素",
+        "title": "命令: 删除元素",
         "icon": "$(trash)"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "noah.vp.insertImgByClipboardy",
-          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
-          "group": "markdown.print@2"
+          "submenu": "noah.addElem",
+          "group": "noah@1"
         },
         {
-          "command": "noah.vp.insertImg",
-          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
-          "group": "markdown.print@2"
-        },
-        {
-          "command": "noah.vp.previewFile",
-          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
-          "group": "markdown.print@2"
-        },
-        {
-          "command": "noah.vp.workstart",
-          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
-          "group": "markdown.print@2"
+          "submenu": "noah.project",
+          "group": "noah@2"
         }
       ],
       "view/title": [
@@ -143,8 +131,62 @@
           "command": "noah.vp.delEle",
           "when": "view == vuepressTree"
         }
+      ],
+      "noah.addElem": [
+        {
+          "command": "noah.vp.insertImgByClipboardy",
+          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
+          "group": "noah.image@1"
+        },
+        {
+          "command": "noah.vp.insertImg",
+          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
+          "group": "noah.image@1"
+        },
+        {
+          "command": "noah.vp.delEle",
+          "title": "元素: 插入代码块",
+          "group": "noah.struct@2"
+        },
+        {
+          "command": "noah.vp.delEle",
+          "title": "元素: 插入链接",
+          "group": "noah.struct@2"
+        },
+        {
+          "command": "noah.vp.delEle",
+          "title": "元素: 插入标识符",
+          "group": "noah.struct@2"
+        }
+      ],
+      "noah.project": [
+        {
+          "command": "noah.vp.workstart",
+          "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
+          "group": "markdown.print@1"
+        }
       ]
-    }
+    },
+    "submenus": [
+      {
+        "id": "noah.addElem",
+        "label": "🌻 AutoDoc 插入元素",
+        "icon": "$(something)"
+      },
+      {
+        "id": "noah.project",
+        "label": "🌊 AutoDoc 项目控制",
+        "icon": "$(something)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "noah.vp.insertImgByClipboardy",
+        "key": "ctrl+shift+i",
+        "mac": "ctrl+shift+i",
+        "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1"
+      }
+    ]
   },
   "capabilities": {
     "virtualWorkspaces": {

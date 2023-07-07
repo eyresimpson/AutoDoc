@@ -1,3 +1,4 @@
+import { Uri, commands } from "vscode";
 import pathTools from "./pathTools";
 
 const fs = require("fs");
@@ -44,4 +45,9 @@ export class VuepressConfig {
   }
   // 将配置应用到当前配置文件
   apply() {}
+}
+
+
+export default {
+
 }

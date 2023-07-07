@@ -3,20 +3,13 @@
 import {
   commands,
   ExtensionContext,
-  Position,
-  Range,
-  TreeItem,
-  Uri,
   window,
-  workspace,
 } from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import common from "./tools/commonTools";
 import pathTools from "./tools/pathTools";
-import systemTools from "./tools/systemTools";
 import fileTools from "./tools/fileTools";
-import { VuepressConfig } from "./tools/configTools";
 
 // activate 注册
 export function activate(context: ExtensionContext) {
@@ -32,7 +25,7 @@ export function activate(context: ExtensionContext) {
     commands.registerCommand("noah.vp.workstart", () => workstart()),
     // 打开文档（注意，必须只能一定要在项目中点击打开，或者给他传参也可以
     commands.registerCommand("noah.vp.openDoc", (config: any) =>
-      openDoc(config)
+      fileTools.openDoc(config)
     ),
     // 新建节点（注意，必须只能一定要在项目中点击打开，或者给他传参也可以
     commands.registerCommand("noah.vp.addDir", (config: any) =>
@@ -52,7 +45,10 @@ function insertImg() {
       openLabel: "插入此图片",
       canSelectFiles: true,
       canSelectFolders: false,
-      canSelectMany: true,
+      canSelectMany: false,
+      filters:{
+        "图片文件":["PNG","JPG","JPEG"]
+      }
     })
     .then((urls: any) => {
       if (urls == undefined) return;
@@ -115,10 +111,6 @@ function workstart() {
   // common.createStatusBarItem();
 }
 
-// 打开文件（配置结构树）
-function openDoc(config: string) {
-  commands.executeCommand("vscode.open", Uri.parse(mdFilePath(config)));
-}
 
 // 新建节点
 function createNode(config: any) {
@@ -131,8 +123,6 @@ function createNode(config: any) {
   } else {
     configPath = config;
   }
-  // 目标地址： mdFilePath(configPath)
-  // console.log(vuepress);
 
   // 修改配置文件
 }
@@ -142,20 +132,7 @@ function createNode(config: any) {
 
 // 删除文档
 
-function mdFilePath(config: any) {
-  let filePath = pathTools.getDocFolderPath();
 
-  if (config.endsWith(".md") || config.endsWith(".MD")) {
-    filePath = path.join(filePath, config);
-  } else {
-    try {
-      filePath = path.join(filePath, config + "README.md");
-    } catch (error) {
-      filePath = path.join(filePath, config + "readme.md");
-    }
-  }
-  return filePath;
-}
 
 // 提供需要提供一个 TreeItem 对象，返回其对应的目录路径
 function findPathInTree(tree: any) {
@@ -181,8 +158,6 @@ function removeLastSegment(str: string): string {
 
 // 插入剪贴板图片的实现
 function insertImgByClipboardy() {
-  // 读取剪贴板，如果是文字，直接退出
-
   // 尝试执行复制操作，此操作会让vscode将图片复制到当前目录下
   commands.executeCommand("editor.action.clipboardPasteAction");
   setTimeout(() => {
@@ -197,7 +172,13 @@ function insertImgByClipboardy() {
       console.log("【ERROR】无法获取当前打开的文档！");
       return;
     }
+    
     let document = activeTextEditor.document;
+    if(!fs.existsSync(removeLastSegment(document.uri.fsPath) + "image.png")){
+      window.showErrorMessage('【ERROR】剪贴板中的内容不是图片，请检查并重新截取!');
+      commands.executeCommand("undo");
+      return
+    }
     // 获取当前文档路径
     let fileName = "";
     let fileNameWithExtension;
@@ -236,9 +217,4 @@ function insertImgByClipboardy() {
       );
     });
   },1000);
-  // 将当前目录下的图片复制到img中
-
-  // 新加入正确的MD图片格式
-
-  // 打开对话框，要求用户选择图片
 }
