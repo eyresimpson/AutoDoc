@@ -10,6 +10,7 @@ import * as path from "path";
 import common from "./tools/commonTools";
 import pathTools from "./tools/pathTools";
 import fileTools from "./tools/fileTools";
+import systemTools from "./tools/systemTools";
 
 // activate 注册
 export function activate(context: ExtensionContext) {
@@ -32,7 +33,7 @@ export function activate(context: ExtensionContext) {
       createNode(config)
     ),
     // 这东西就是空的，如果需要点击菜单、节点时做点啥请重新建 command，不要用这个
-    commands.registerCommand("noah.vp.previewFile", () => {})
+    commands.registerCommand("noah.vp.previewFile", () => { })
   );
 }
 
@@ -46,8 +47,8 @@ function insertImg() {
       canSelectFiles: true,
       canSelectFolders: false,
       canSelectMany: false,
-      filters:{
-        "图片文件":["PNG","JPG","JPEG"]
+      filters: {
+        "图片文件": ["PNG", "JPG", "JPEG"]
       }
     })
     .then((urls: any) => {
@@ -94,10 +95,10 @@ function insertImg() {
             return;
           }
           // TODO: 对图片进行压缩（如果需要）
-          const finalPath = path.join("/imgs/",pathTools.getCurrentDocumentRelativePath()!, imgFileName + suffix)
+          const finalPath = path.join("/imgs/", pathTools.getCurrentDocumentRelativePath()!, imgFileName + suffix)
           // 组合图片的 Url
           common.insertTextAtCursorPosition(
-            "<img :src=\"$withBase('" + finalPath.replace(/\\/g,'/') + "')\" />"
+            "<img :src=\"$withBase('" + finalPath.replace(/\\/g, '/') + "')\" />"
           );
         }
       );
@@ -151,9 +152,14 @@ function findPathInTree(tree: any) {
 
 // 移除最后的一段地址
 function removeLastSegment(str: string): string {
-  const segments = str.split("/");
+  let flag = "/";
+  // Windows 兼容
+  if (systemTools.getSystemFlag() == 0) {
+    flag = "\\"
+  }
+  const segments = str.split(flag);
   segments.pop(); // 移除最后一个元素
-  return segments.join("/") + "/";
+  return segments.join(flag) + flag;
 }
 
 // 插入剪贴板图片的实现
@@ -172,9 +178,21 @@ function insertImgByClipboardy() {
       console.log("【ERROR】无法获取当前打开的文档！");
       return;
     }
-    
     let document = activeTextEditor.document;
-    if(!fs.existsSync(removeLastSegment(document.uri.fsPath) + "image.png")){
+    // let imgRawPath = "";
+    // if (systemTools.getSystemFlag()==0) {
+    //   imgRawPath = document.uri._fsPath
+    // }else{
+    //   imgRawPath = document.uri.fsPath
+    // }
+
+
+
+    if (!fs.existsSync(removeLastSegment(document.uri.fsPath) + "image.png")) {
+      console.log("Img Path:1 ", document.uri);
+      console.log("Img Path:2 ", document.uri.fsPath);
+      console.log("Img Path:3 ", document.uri.path);
+      console.log("Img Path:4 ", removeLastSegment(document.uri.fsPath))
       window.showErrorMessage('【ERROR】剪贴板中的内容不是图片，请检查并重新截取!');
       commands.executeCommand("undo");
       return
@@ -211,10 +229,10 @@ function insertImgByClipboardy() {
       }
     );
     commands.executeCommand("undo").then(() => {
-      const finalPath = path.join("/imgs/",pathTools.getCurrentDocumentRelativePath()!, imgFileName + suffix)
+      const finalPath = path.join("/imgs/", pathTools.getCurrentDocumentRelativePath()!, imgFileName + suffix)
       common.insertTextAtCursorPosition(
-        "<img :src=\"$withBase('" + finalPath.replace(/\\/g,'/') + "')\" />"
+        "<img :src=\"$withBase('" + finalPath.replace(/\\/g, '/') + "')\" />"
       );
     });
-  },1000);
+  }, 1000);
 }
