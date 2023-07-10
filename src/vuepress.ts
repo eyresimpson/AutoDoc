@@ -97,7 +97,7 @@ function insertImg() {
           const finalPath = path.join("/imgs/",pathTools.getCurrentDocumentRelativePath()!, imgFileName + suffix)
           // 组合图片的 Url
           common.insertTextAtCursorPosition(
-            "<img :src=\"$withBase('" + finalPath + "')\" />"
+            "<img :src=\"$withBase('" + finalPath.replace(/\\/g,'/') + "')\" />"
           );
         }
       );
@@ -213,7 +213,7 @@ function insertImgByClipboardy() {
     commands.executeCommand("undo").then(() => {
       const finalPath = path.join("/imgs/",pathTools.getCurrentDocumentRelativePath()!, imgFileName + suffix)
       common.insertTextAtCursorPosition(
-        "<img :src=\"$withBase('" + finalPath + "')\" />"
+        "<img :src=\"$withBase('" + finalPath.replace(/\\/g,'/') + "')\" />"
       );
     });
   },1000);
