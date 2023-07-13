@@ -78,31 +78,6 @@ function insertTextAtCursorPosition(text: string): Thenable<boolean> {
   return Promise.resolve(false);
 }
 
-// 执行npm命令
-function executeNpmScript(scriptName: string): void {
-  const task = new Task(
-    { type: "npm", script: scriptName },
-    TaskScope.Workspace,
-    scriptName,
-    "npm",
-    new ShellExecution(`npm run ${scriptName}`)
-  );
-
-  tasks.executeTask(task);
-}
-
-// 执行普通命令
-function executeScript(script: string): void {
-  const task = new Task(
-    { type: "vuepress", script: script },
-    TaskScope.Workspace,
-    "vuepress",
-    "vuepress",
-    new ShellExecution(script)
-  );
-
-  tasks.executeTask(task);
-}
 
 function createStatusBarItem() {
   const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
@@ -113,34 +88,12 @@ function createStatusBarItem() {
 }
 
 
-// 尝试读取文件第一行的名称
-function getFileTitle(filePath: string) {
-  const fileUri = Uri.file(filePath);
-  const document = workspace.openTextDocument(fileUri);
 
-  return new Promise<string | undefined>((resolve) => {
-    document.then((doc) => {
-      const lines: string[] = [];
-      for (let i = 0; i < doc.lineCount; i++) {
-        const line = doc.lineAt(i);
-        if (line.text.startsWith("# ")) {
-          const headingText = line.text.substring(2).trim();
-          resolve(headingText);
-          return;
-        }
-      }
-      resolve(undefined);
-    });
-  });
-}
 
 export default {
   extractDefaultThemeConfigFromFile,
   extractContent,
   createStatusBarItem,
-  executeScript,
-  executeNpmScript,
   insertTextAtCursorPosition,
   getCurrentDateTime,
-  getFileTitle,
 };

@@ -108,7 +108,7 @@ function insertImg() {
 // 启动项目的实现
 function workstart() {
   // TODO：可能不兼容其他的命令，后续加一下校验
-  common.executeNpmScript("start");
+  systemTools.executeNpmScript("start");
   // common.createStatusBarItem();
 }
 
@@ -235,4 +235,28 @@ function insertImgByClipboardy() {
       );
     });
   }, 1000);
+}
+
+// 快捷修改图片的实现
+function changeImgByClipboardy(){
+  // 读取光标所在行内容
+
+  // 获取目标文件路径
+
+  // 删除光标所在行内容
+
+  // 执行插入剪贴板图片的操作
+
+  // 判断文件是否插入成功
+
+  // 删除原图片
+
+}
+
+// 清理无效的图片，会直接删除无效的图片
+function cleanAloneImages(){
+  // 扫描所有文档中引用的图片
+
+  // 遍历图片文件夹，如果不在名单中，删除
+
 }

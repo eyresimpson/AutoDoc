@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import { Func } from "mocha";
 import path = require("path");
-import { window } from "vscode";
+import { ShellExecution, Task, TaskScope, tasks, window } from "vscode";
 
 const os = require("os");
 
@@ -20,62 +20,32 @@ function getSystemFlag() {
   }
 }
 
-// 系统剪贴板复制
-function saveClipboardImageToFile(imagePath: string, cb: Function) {
-  if (!imagePath) return;
-  let platform = process.platform;
-  if (platform === "win32") {
-    // Windows
-    const scriptPath = path.join(__dirname, "./lib/pc.ps1");
-    const powershell = spawn("powershell", [
-      "-noprofile",
-      "-noninteractive",
-      "-nologo",
-      "-sta",
-      "-executionpolicy",
-      "unrestricted",
-      "-windowstyle",
-      "hidden",
-      "-file",
-      scriptPath,
-      imagePath,
-    ]);
-    powershell.on("exit", function (_code, _signal) {});
-    powershell.stdout.on("data", function (data) {
-      cb(data.toString().trim());
-    });
-  } else if (platform === "darwin") {
-    // Mac
-    let scriptPath = path.join(__dirname, "../lib/mac.applescript");
+// 执行npm命令
+function executeNpmScript(scriptName: string): void {
+  const task = new Task(
+    { type: "npm", script: scriptName },
+    TaskScope.Workspace,
+    scriptName,
+    "npm",
+    new ShellExecution(`npm run ${scriptName}`)
+  );
 
-    let ascript = spawn("osascript", [scriptPath, imagePath]);
-    ascript.on("exit", function (_code, _signal) {});
-
-    ascript.stdout.on("data", function (data) {
-      cb(data.toString().trim());
-    });
-  } else {
-    // Linux
-
-    let scriptPath = path.join(__dirname, "./lib/linux.sh");
-
-    let ascript = spawn("sh", [scriptPath, imagePath]);
-    ascript.on("exit", function (_code, _signal) {});
-
-    ascript.stdout.on("data", function (data) {
-      let result = data.toString().trim();
-      if (result == "no xclip") {
-        window.showInformationMessage(
-          "You need to install xclip command first."
-        );
-        return;
-      }
-      cb(result);
-    });
-  }
+  tasks.executeTask(task);
 }
 
+// 执行普通命令
+function executeScript(script: string): void {
+  const task = new Task(
+    { type: "vuepress", script: script },
+    TaskScope.Workspace,
+    "vuepress",
+    "vuepress",
+    new ShellExecution(script)
+  );
+
+  tasks.executeTask(task);
+}
 export default {
   getSystemFlag,
-  saveClipboardImageToFile,
+  executeNpmScript,
 };

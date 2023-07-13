@@ -3,6 +3,7 @@ import * as path from "path";
 import { ThemeIcon } from "vscode";
 import common from "../tools/commonTools";
 import pathTools from "../tools/pathTools";
+import markdownTools from "../tools/markdownTools";
 
 export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<
@@ -118,7 +119,7 @@ export class DocTreeProvider implements vscode.TreeDataProvider<DocItem> {
             filePath = path.join(filePath, arr[index] + "readme.md");
           }
         }
-        common.getFileTitle(filePath).then((name) => {
+        markdownTools.getFileTitle(filePath).then((name) => {
           docItemArr.push(
             new DocItem(
               // common.extractContent(arr[index]),
