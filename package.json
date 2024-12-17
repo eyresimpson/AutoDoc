@@ -207,7 +207,7 @@
     "grapheme-splitter": "^1.0.4",
     "highlight.js": "^11.5.1",
     "image-size": "^0.9.3",
-    "katex": "^0.16.4",
+    "katex": "^0.16.15",
     "string-similarity": "^4.0.4"
   },
   "devDependencies": {

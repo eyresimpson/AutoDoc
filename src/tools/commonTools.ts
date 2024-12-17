@@ -1,13 +1,7 @@
 import * as fs from "fs";
 import {
-  ShellExecution,
   StatusBarAlignment,
-  Task,
-  tasks,
-  TaskScope,
-  Uri,
   window,
-  workspace,
 } from "vscode";
 
 // 从js中解析树结构
@@ -21,7 +15,7 @@ function extractDefaultThemeConfigFromFile(filePath: string): any {
 
     // 解析 JSON 字符串为 JavaScript 对象
     try {
-      const defaultThemeConfig = eval(`(${defaultThemeConfigString})`);
+      const defaultThemeConfig = JSON.parse(`(${defaultThemeConfigString})`);
       return defaultThemeConfig;
     } catch (error) {
       console.error("Failed to parse defaultTheme config:", error);
@@ -33,30 +27,20 @@ function extractDefaultThemeConfigFromFile(filePath: string): any {
 
 // 分割 MD 文件名
 function extractContent(input: string): string {
-  const parts = input.split("/"); // 将字符串按照斜杠进行分割
-  let lastPart = "";
-  if (input.endsWith("/")) {
-    lastPart = parts[parts.length - 2]; // 获取倒数第二个分割后的部分
-  } else {
-    if (input.endsWith(".md")) {
-      lastPart = parts[parts.length - 1].split(".md")[0];
-    } else {
-      lastPart = parts[parts.length - 1]; // 获取倒数第二个分割后的部分
-    }
-  }
-  return lastPart;
+  const parts = input.split("/");
+  const lastPart = parts[parts.length - 1];
+  return lastPart.endsWith(".md") ? lastPart.slice(0, -3) : lastPart;
 }
 
 // 获取日期时间，返回格式为 230627105501
 function getCurrentDateTime(): string {
   const now = new Date();
-
-  const year = now.getFullYear().toString().slice(-2); // 提取年份的后两位
-  const month = (now.getMonth() + 1).toString().padStart(2, "0"); // 获取月份，并确保是两位数
-  const day = now.getDate().toString().padStart(2, "0"); // 获取日期，并确保是两位数
-  const hours = now.getHours().toString().padStart(2, "0"); // 获取小时，并确保是两位数
-  const minutes = now.getMinutes().toString().padStart(2, "0"); // 获取分钟，并确保是两位数
-  const seconds = now.getSeconds().toString().padStart(2, "0"); // 获取秒数，并确保是两位数
+  const year = now.getFullYear().toString().slice(-2);
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const seconds = String(now.getSeconds()).padStart(2, "0");
 
   return `${day}${month}${year}${hours}${minutes}${seconds}`;
 }
@@ -82,11 +66,9 @@ function insertTextAtCursorPosition(text: string): Thenable<boolean> {
 function createStatusBarItem() {
   const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
   statusBarItem.text = "$(file-code) My Panel";
-  // statusBarItem.command = 'extension.myPanelCommand'; // 替换为你的命令 ID
-
+  statusBarItem.command = 'extension.myPanelCommand'; // 确保命令已注册
   statusBarItem.show();
 }
-
 
 
 

@@ -1,19 +1,6 @@
-import clipboardy from "clipboardy";
 import path = require("path");
 import { commands, Uri } from "vscode";
 import pathTools from "./pathTools";
-const fs = require("fs");
-
-async function saveClipboardImage(): Promise<void> {
-  try {
-    const imageBuffer = clipboardy.readSync()
-    const filePath = `/Users/eyresimpson/Code/OpenSource/AutoDoc/src/tools/fileTools.jpg`;
-    fs.writeFileSync(filePath, imageBuffer);
-    console.log(`Image saved to: ${filePath}`);
-  } catch (error) {
-    console.error("Failed to save image:", error);
-  }
-}
 
 // 打开文件（配置结构树）
 function openDoc(config: string) {
@@ -36,5 +23,5 @@ function mdFilePath(config: any) {
 }
 
 export default {
-  saveClipboardImage,openDoc
+  openDoc
 };
